@@ -40,4 +40,8 @@ return [
         'model' => env('OPENAI_MODEL', 'gpt-4o'),
     ],
 
+    'pinata' => [
+        'secret' => env('PINATA_API_KEY'),
+    ],
+
 ];

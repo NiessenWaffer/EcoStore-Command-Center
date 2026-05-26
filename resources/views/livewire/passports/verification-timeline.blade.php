@@ -91,7 +91,24 @@ $verify = function (App\Services\PassportService $service) {
     @elseif($verificationResult === 'tampered')
         <div class="mt-8 p-4 bg-red-50 rounded-lg border border-red-100 flex items-center gap-3 transition-all duration-500">
             <x-lucide-alert-triangle class="w-5 h-5 text-red-600" />
-            <p class="text-sm text-red-800 font-bold">Integrity Alert! Historical tampering detected in the cryptographic chain.</p>
+            <p class="text-sm text-green-800 font-bold">Integrity Alert! Historical tampering detected in the cryptographic chain.</p>
         </div>
-    @endif
-</div>
+        @endif
+
+        @if($passport->ipfs_cid)
+        <div class="mt-8 p-4 bg-emerald-50 rounded-lg border border-emerald-100 flex items-center justify-between group">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-white rounded-lg shadow-sm">
+                    <x-lucide-database class="w-4 h-4 text-emerald-600" />
+                </div>
+                <div>
+                    <p class="text-[10px] font-black uppercase tracking-widest text-emerald-900">Decentralized Proof</p>
+                    <p class="text-[8px] font-bold text-emerald-600 uppercase tracking-widest">Secured on IPFS</p>
+                </div>
+            </div>
+            <a href="https://gateway.pinata.cloud/ipfs/{{ $passport->ipfs_cid }}" target="_blank" class="px-4 py-2 bg-emerald-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-emerald-700 transition shadow-sm group-hover:scale-105 transition-transform">
+                View Raw Data
+            </a>
+        </div>
+        @endif
+        </div>

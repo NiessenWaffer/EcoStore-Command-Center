@@ -12,6 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->append(\App\Http\Middleware\DetectFraud::class);
+        $middleware->alias([
+            'brand.api' => \App\Http\Middleware\AuthenticateBrandApi::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

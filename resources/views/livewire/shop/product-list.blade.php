@@ -10,23 +10,29 @@ new class extends Component
     use WithPagination;
 
     public $selectedCategory = '';
+    public $selectedBrand = '';
     public $selectedGrade = '';
     public $search = '';
 
-    protected $queryString = ['selectedCategory', 'selectedGrade', 'search'];
+    protected $queryString = ['selectedCategory', 'selectedBrand', 'selectedGrade', 'search'];
 
     public function updatingSearch() { $this->resetPage(); }
     public function updatingSelectedCategory() { $this->resetPage(); }
+    public function updatingSelectedBrand() { $this->resetPage(); }
     public function updatingSelectedGrade() { $this->resetPage(); }
 
     public function with()
     {
         $query = Product::query()
-            ->with('category')
+            ->with(['category', 'brand'])
             ->where('is_published', true);
 
         if ($this->selectedCategory) {
             $query->where('category_id', $this->selectedCategory);
+        }
+
+        if ($this->selectedBrand) {
+            $query->where('brand_id', $this->selectedBrand);
         }
 
         if ($this->selectedGrade) {
@@ -52,6 +58,7 @@ new class extends Component
         return [
             'products' => $products,
             'categories' => Category::all(),
+            'brands' => \App\Models\Brand::where('is_verified', true)->get(),
         ];
     }
 
@@ -96,6 +103,22 @@ new class extends Component
                         <label class="flex items-center group cursor-pointer">
                             <input type="radio" wire:model.live="selectedCategory" value="{{ $category->id }}" class="hidden">
                             <span class="text-sm font-bold @if($selectedCategory == $category->id) text-stone-900 @else text-stone-400 @endif group-hover:text-stone-900 transition">{{ $category->name }}</span>
+                        </label>
+                    @endforeach
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-xs font-black uppercase tracking-widest text-stone-400 mb-6">Brands</h3>
+                <div class="space-y-3">
+                    <label class="flex items-center group cursor-pointer">
+                        <input type="radio" wire:model.live="selectedBrand" value="" class="hidden">
+                        <span class="text-sm font-bold @if($selectedBrand === '') text-stone-900 @else text-stone-400 @endif group-hover:text-stone-900 transition">All Brands</span>
+                    </label>
+                    @foreach($brands as $brand)
+                        <label class="flex items-center group cursor-pointer">
+                            <input type="radio" wire:model.live="selectedBrand" value="{{ $brand->id }}" class="hidden">
+                            <span class="text-sm font-bold @if($selectedBrand == $brand->id) text-stone-900 @else text-stone-400 @endif group-hover:text-stone-900 transition">{{ $brand->name }}</span>
                         </label>
                     @endforeach
                 </div>
@@ -187,10 +210,10 @@ new class extends Component
                     <p class="text-stone-500">Try adjusting your filters or search query.</p>
                 </div>
             @else
-                <div class="grid grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8 md:gap-x-8 md:gap-y-16">
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-12 md:gap-x-8 md:gap-y-20">
                     @foreach($products as $product)
-                    <a href="{{ route('product.show', $product->slug) }}" class="group block space-y-4">
-                        <div class="aspect-[3/4] bg-stone-100 rounded-sm md:rounded-xl overflow-hidden relative shadow-sm hover:shadow-xl transition-all duration-500">
+                    <a href="{{ route('product.show', $product->slug) }}" class="group flex flex-col h-full">
+                        <div class="aspect-[3/4] bg-stone-100 rounded-sm md:rounded-xl overflow-hidden relative shadow-sm hover:shadow-xl transition-all duration-500 mb-4">
                             @if($product->image_url)
                                 <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
                             @else
@@ -239,7 +262,9 @@ new class extends Component
                                     <span class="text-sm md:text-base font-medium text-stone-500 mt-0.5">${{ number_format($product->price_cents / 100, 2) }}</span>
                                 </div>
                                 <div class="flex justify-between items-center mt-1">
-                                    <p class="text-[9px] md:text-[10px] font-bold text-stone-400 uppercase tracking-widest">{{ $product->category->name }}</p>
+                                    <p class="text-[9px] md:text-[10px] font-bold text-stone-400 uppercase tracking-widest">
+                                        {{ $product->brand?->name ?? 'EcoStore' }} &bull; {{ $product->category->name }}
+                                    </p>
                                     <p class="text-[9px] md:text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 px-2 py-0.5 rounded-sm">Saves {{ number_format($product->variants->first()->physical_weight_kg * 2700) }}L</p>
                                 </div>
                             </div>

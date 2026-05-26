@@ -35,6 +35,10 @@ Route::get('/', function () {
 
 Route::get('/mission', [MissionController::class, 'index'])->name('mission');
 
+Route::get('/partners', function () {
+    return view('partners.index');
+})->name('partners.index');
+
 Route::get('/shop', [ProductController::class, 'index'])->name('shop');
 Route::get('/product/{product:slug}', [ProductController::class, 'show'])->name('product.show');
 
@@ -66,6 +70,7 @@ use App\Livewire\Dashboard\CommandCenter;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/{tab?}', CommandCenter::class)->name('dashboard');
+    Route::get('/partner/dashboard', App\Livewire\Partner\Dashboard::class)->name('partner.dashboard');
 
     Route::get('/returns/deterrent', [ReturnController::class, 'showDeterrent'])->name('return.deterrent');
     Route::post('/returns/submit', [ReturnController::class, 'store'])->name('return.store');
@@ -92,6 +97,12 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/certificate/verify/{signature}', function ($signature) {
     return "Verification Page for Signature: " . $signature;
 })->name('certificate.verify');
+
+Route::middleware(['brand.api'])->prefix('api/v1')->group(function () {
+    Route::get('/products', [App\Http\Controllers\Api\BrandApiController::class, 'listProducts']);
+    Route::post('/products', [App\Http\Controllers\Api\BrandApiController::class, 'createProduct']);
+    Route::post('/passports', [App\Http\Controllers\Api\BrandApiController::class, 'mintPassport']);
+});
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('admin.dashboard');

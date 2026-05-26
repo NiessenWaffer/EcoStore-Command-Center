@@ -26,7 +26,8 @@ artifact_sequence:
 | 17 | responsive_hardening_admin_command_center | mobile_first_operational_oversight | List plan/plan17/ | List plan/plan17/plan.md | List plan/plan17/workflow.md | List plan/plan17/task.md | completed | 10, 14 | none |
 | 18 | data_hardening_and_service_integration | technical_integrity_and_data_truth | List plan/plan18/ | List plan/plan18/plan.md | List plan/plan18/workflow.md | List plan/plan18/task.md | completed | 11, 12, 17 | none |
 | 19 | circular_leasing_and_rental_model | product_as_a_service_and_subscriptions | List plan/plan19/ | List plan/plan19/plan.md | List plan/plan19/workflow.md | List plan/plan19/task.md | completed | 3, 5, 9, 18 | none |
-| 20 | decentralized_permanent_storage | ipfs_integration_and_data_permanence | List plan/plan20/ | List plan/plan20/plan.md | List plan/plan20/workflow.md | List plan/plan20/task.md | pending | 6, 9, 18, 19 | none |
+| 20 | decentralized_permanent_storage | ipfs_integration_and_data_permanence | List plan/plan20/ | List plan/plan20/plan.md | List plan/plan20/workflow.md | List plan/plan20/task.md | completed | 6, 9, 18, 19 | none |
+| 21 | multi-tenant_marketplace_api | b2b_ecosystem_and_partner_onboarding | List plan/plan21/ | List plan/plan21/plan.md | List plan/plan21/workflow.md | List plan/plan21/task.md | completed | 1, 3, 10, 20 | none |
 
 
 

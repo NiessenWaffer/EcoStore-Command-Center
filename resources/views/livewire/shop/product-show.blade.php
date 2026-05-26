@@ -139,6 +139,28 @@ new class extends Component
                     </div>
                 </div>
 
+                @php
+                    $firstPassport = $product->passports()->first();
+                    $ipfsCid = $firstPassport?->ipfs_cid;
+                @endphp
+
+                @if($ipfsCid)
+                    <div class="mb-10 p-4 bg-emerald-50 rounded-xl border border-emerald-100 flex items-center justify-between group">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 bg-white rounded-lg shadow-sm">
+                                <x-lucide-database class="w-4 h-4 text-emerald-600" />
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black uppercase tracking-widest text-emerald-900">Secured on IPFS</p>
+                                <p class="text-[8px] font-bold text-emerald-600 uppercase">Immutable Origin Proof</p>
+                            </div>
+                        </div>
+                        <a href="https://gateway.pinata.cloud/ipfs/{{ $ipfsCid }}" target="_blank" class="px-4 py-2 bg-emerald-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-emerald-700 transition shadow-md group-hover:scale-105 transition-transform">
+                            Verify Data
+                        </a>
+                    </div>
+                @endif
+
                 <!-- Real-World Equivalencies -->
                 <div class="space-y-4 pt-8 border-t border-stone-200/60">
                     <div class="flex items-center space-x-4">

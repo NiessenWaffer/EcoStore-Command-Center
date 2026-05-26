@@ -21,15 +21,19 @@ class ProductPassport extends Model
         'qr_token',
         'is_verified',
         'last_audit_hash',
-    ];
+        'is_leased',
+        'ipfs_cid',
+        'ipfs_synced_at',
+        ];
 
-    protected $casts = [
+        protected $casts = [
         'transit_impact_carbon' => 'decimal:2',
         'manufacturing_date' => 'date',
         'is_verified' => 'boolean',
         'condition_log' => 'array',
         'is_leased' => 'boolean',
-    ];
+        'ipfs_synced_at' => 'datetime',
+        ];
 
     public function owner(): BelongsTo
     {

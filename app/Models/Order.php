@@ -16,6 +16,7 @@ class Order extends Model
         'user_id',
         'guest_session_id',
         'total_cents',
+        'commission_cents',
         'status',
         'payment_status',
         'stripe_payment_intent_id',
@@ -28,6 +29,8 @@ class Order extends Model
     ];
 
     protected $casts = [
+        'total_cents' => 'integer',
+        'commission_cents' => 'integer',
         'total_water_saved' => 'decimal:2',
         'total_carbon_reduced' => 'decimal:2',
         'shipping_address' => 'array',

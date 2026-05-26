@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ProductVariant;
+use App\Models\LeaseSubscription;
 use App\Services\CartService;
 use App\Services\SustainabilityImpactService;
 use Illuminate\Http\Request;
@@ -152,8 +153,9 @@ class CheckoutController extends Controller
                 'local_hub_id' => session('selected_hub_id'),
             ]);
 
+            $totalCommission = 0;
             foreach ($cart as $cartKey => $item) {
-                $variant = ProductVariant::find($item['id']);
+                $variant = ProductVariant::with('product.brand')->find($item['id']);
                 $impact = $this->impactService->calculateVariantImpact($variant);
 
                 OrderItem::create([
@@ -165,7 +167,13 @@ class CheckoutController extends Controller
                     'water_saved_at_purchase' => $impact['water_saved'],
                     'carbon_reduced_at_purchase' => $impact['carbon_reduced'],
                 ]);
-                
+
+                // Calculate commission if product belongs to an external brand
+                if ($variant->product->brand_id) {
+                    $commissionRate = $variant->product->brand->commission_rate;
+                    $totalCommission += (int) (($item['price_cents'] * $item['quantity']) * ($commissionRate / 100));
+                }
+
                 if (($item['purchase_mode'] ?? 'buy') === 'lease') {
                     for ($i = 0; $i < $item['quantity']; $i++) {
                         LeaseSubscription::create([
@@ -179,6 +187,8 @@ class CheckoutController extends Controller
                     }
                 }
             }
+
+            $order->update(['commission_cents' => $totalCommission]);
 
             // If authenticated, update cumulative impact
             if ($order->user_id) {
@@ -211,5 +221,4 @@ class CheckoutController extends Controller
     {
         return redirect()->route('shop')->with('error', 'Payment was cancelled.');
     }
-}  
- 
+}

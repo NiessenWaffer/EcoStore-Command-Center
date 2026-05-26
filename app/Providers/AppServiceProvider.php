@@ -22,5 +22,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         \Illuminate\Support\Facades\View::addNamespace('layouts', resource_path('views/components/layouts'));
+        \App\Models\ProductPassport::observe(\App\Observers\ProductPassportObserver::class);
     }
 }
