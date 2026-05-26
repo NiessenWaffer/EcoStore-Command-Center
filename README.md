@@ -1,128 +1,88 @@
-# EcoStore: Full-Stack Laravel (Laragon) — Radically Transparent Sustainable Fashion
+# EcoStore: Radically Transparent Sustainable Fashion
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://example.com) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![Coverage](https://img.shields.io/badge/coverage-unknown-lightgrey)](https://example.com)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/NiessenWaffer/EcoStore-Command-Center) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-EcoStore is a next-generation B2C e-commerce platform built to redefine the relationship between consumers and their apparel. This repository is a full-stack Laravel application with backend APIs, Blade/Livewire web UI, and frontend assets built with Vite + Tailwind.
+EcoStore is a next-generation B2C e-commerce platform built to redefine the relationship between consumers and their apparel. This repository contains the full-stack Laravel application, featuring backend APIs, a Blade/Livewire web UI, and frontend assets built with Vite + Tailwind CSS.
 
-Planning docs: See "Planning mode/Planning.md" for project planning and decisions.
+## 🌟 Key Features (The 19-Plan Ecosystem)
 
+We have successfully implemented a comprehensive circular economy platform. Key highlights include:
 
+- **Circular Leasing Model:** Product-as-a-service with recurring Stripe billing and condition-tracking returns.
+- **Immutable Trust Layer (Product Passports):** Cryptographic verification of product origin, factory audits, and transit carbon impact.
+- **Resale & Trade-in Portal:** Automated store credit for returning past items to Local Hubs.
+- **Decentralized Governance:** Quadratic voting for community-led resource allocation and feature direction.
+- **Gamified Ambassador Network:** Tiered referral system and zero-return rewards.
+- **Dynamic Carbon Gate Fees:** Real-time distance-based shipping penalties calculated via Haversine logic.
 
-EcoStore is a next-generation B2C e-commerce platform built to redefine the relationship between consumers and their apparel. This repository is a full-stack Laravel application with backend APIs, Blade/Livewire web UI, and frontend assets built with Vite + Tailwind.
+*Note: For detailed architectural blueprints and user workflows for all 20 plans, see the `List plan/` directory.*
 
-This README has been expanded with full-stack developer instructions for local development, testing, and deployment (Laragon and general setups).
+## 🚀 Local Development (Laragon)
 
-## Prerequisites
-
+### Prerequisites
 - PHP 8.3+
-- Composer
-- Node.js (18+)
-- NPM or Yarn
-- MySQL / MariaDB (or use SQLite for quick testing)
-- (Recommended for Windows) Laragon or Valet for Mac
+- Composer & Node.js (18+)
+- MySQL / MariaDB
+- Laragon (Recommended for Windows) or Laravel Valet (Mac)
 
-## Local Development (Laragon)
+### Setup Instructions
 
-1. Clone the repository into your Laragon www folder.
-2. Start Laragon and create a site or use the built-in virtual host.
-3. From the project root, install dependencies:
+1. Clone the repository into your Laragon `www` folder.
+2. Install PHP and Node dependencies:
+   ```bash
+   composer install
+   npm install
+   ```
+3. Setup your environment variables:
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+4. Configure your database in `.env` (Laragon defaults: DB_HOST=127.0.0.1, DB_DATABASE=your_db, DB_USERNAME=root, DB_PASSWORD=)
+5. Run migrations and seed the ecosystem (Brands, Hubs, Products, Passports):
+   ```bash
+   php artisan migrate:fresh --seed
+   ```
+6. Build frontend assets:
+   ```bash
+   npm run build
+   ```
+7. Access your application via Laragon's virtual host (e.g., `http://ecostore.test`) or use:
+   ```bash
+   php artisan serve
+   ```
 
+## ⚙️ Environment Variables (Important)
+
+Add your API keys and credentials to `.env`:
+- `OPENAI_API_KEY`: For the AI Stylist feature.
+- `STRIPE_KEY` and `STRIPE_SECRET`: For payments and leasing subscriptions.
+- `MAIL_*`: Settings for email delivery (Impact Recaps).
+
+*Sensitive keys must never be committed to version control.*
+
+## 🧪 Testing
+
+Run the full PHPUnit integration suite:
 ```bash
-composer install
-npm install
+php artisan test
 ```
 
-4. Copy env and generate key:
+## 🛠️ Common Artisan Commands
 
-```bash
-cp .env.example .env
-php artisan key:generate
-```
+- **Send Impact Recaps:**
+  ```bash
+  php artisan app:send-impact-recap
+  ```
+- **Reward Zero-Return Shoppers:**
+  ```bash
+  php artisan app:reward-zero-returns
+  ```
 
-5. Configure database in `.env` (Laragon defaults: DB_HOST=127.0.0.1, DB_DATABASE=your_db, DB_USERNAME=root, DB_PASSWORD=)
+## 📜 License
 
-6. Run migrations and seeders:
-
-```bash
-php artisan migrate --seed
-# or
-php artisan migrate:fresh --seed --class=SampleProductSeeder
-```
-
-7. Build frontend assets and run dev server:
-
-```bash
-npm run dev   # for local development (vite)
-npm run build # production build
-```
-
-8. Serve the app (Laragon will serve automatically via virtual host) or use:
-
-```bash
-php artisan serve --host=127.0.0.1 --port=8000
-```
-
-## Environment variables (important)
-
-Add API keys and credentials to `.env`:
-
-- OPENAI_API_KEY=your_key
-- STRIPE_KEY and STRIPE_SECRET for payments
-- MAIL_* settings for email delivery
-
-Sensitive keys must never be committed.
-
-## Testing
-
-Run PHPUnit tests:
-
-```bash
-vendor/bin/phpunit
-```
-
-Run frontend tests or linters if configured:
-
-```bash
-npm run test
-npm run lint
-```
-
-## Common Artisan Commands
-
-- Send Impact Recaps:
-
-```bash
-php artisan app:send-impact-recap
-```
-
-- Reward Zero-Return Shoppers:
-
-```bash
-php artisan app:reward-zero-returns
-```
-
-## Deployment
-
-- Ensure `APP_ENV=production` and `APP_DEBUG=false` in `.env`.
-- Build assets with `npm run build`.
-- Run `php artisan migrate --force` on production.
-- Use a process manager for queue workers (supervisor, systemd) and ensure cron runs `php artisan schedule:run` every minute.
-
-## Docker (Optional)
-
-A Docker setup is not included by default. For containerized deployments, use standard PHP-FPM + Nginx images and include a database service and queue worker.
-
-## Contributing
-
-- Fork the repo, create a feature branch, open a PR with a clear description and tests where applicable.
-- Follow PSR standards and run static analysis/tests before submitting.
-
-## License
-
-This project is MIT licensed. Modify as needed.
+This project is open-sourced software licensed under the **MIT license**.
 
 ---
 
-Built for the Planet. Radical Transparency. Ethical Style.
-
-# EcoStore-Command-Center
+**Built for the Planet. Radical Transparency. Ethical Style.**
